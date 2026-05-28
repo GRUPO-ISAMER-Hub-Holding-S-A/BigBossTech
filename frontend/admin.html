@@ -1,0 +1,126 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>BIGBOSS ADMIN</title>
+
+    <style>
+        body {
+            background: #050816;
+            color: white;
+            font-family: Inter;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #00e5ff;
+        }
+
+        .panel {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #1e293b;
+            text-align: left;
+        }
+
+        img {
+            width: 70px;
+            border-radius: 10px;
+        }
+
+        button {
+            background: #00e5ff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .delete {
+            background: red;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>BIGBOSS ADMIN PANEL</h1>
+
+    <div class="panel">
+        <table>
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Modelo</th>
+                    <th>Color</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="productsTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+
+        async function loadProducts() {
+
+            const res = await fetch('http://localhost:3000/products');
+
+            const products = await res.json();
+
+            const table = document.getElementById('productsTable');
+
+            table.innerHTML = '';
+
+            products.forEach(product => {
+
+                table.innerHTML += `
+    <tr>
+        <td>
+        <img src="${product.image}" />
+        </td>
+
+        <td>${product.name}</td>
+        <td>${product.model}</td>
+        <td>${product.color}</td>
+        <td>${product.stock}</td>
+        <td>USD ${product.price}</td>
+
+        <td>
+        <button>Editar</button>
+        <button class="delete">Eliminar</button>
+        </td>
+    </tr>
+    `;
+            });
+        }
+
+        loadProducts();
+
+    </script>
+
+</body>
+
+</html>
+```
