@@ -58,37 +58,93 @@
         </span>
     </h2>
 
-    <form id="checkoutForm">
+<form id="checkoutForm" class="checkout-form">
 
-        <input
+    <h3>Datos personales</h3>
+
+    <input
         type="text"
         id="nombre"
-        placeholder="Nombre completo"
+        placeholder="Nombre y Apellido"
         required
-        >
+    >
 
-        <input
+    <input
         type="email"
         id="email"
         placeholder="Correo electrónico"
         required
-        >
+    >
 
-        <input
+    <input
         type="tel"
         id="telefono"
         placeholder="Teléfono"
         required
-        >
+    >
 
-        <button
+    <h3>Dirección de envío</h3>
+
+    <input
+        type="text"
+        id="provincia"
+        placeholder="Provincia"
+        required
+    >
+
+    <input
+        type="text"
+        id="localidad"
+        placeholder="Localidad"
+        required
+    >
+
+    <input
+        type="text"
+        id="codigoPostal"
+        placeholder="Código Postal"
+        required
+    >
+
+    <input
+        type="text"
+        id="calle"
+        placeholder="Calle"
+        required
+    >
+
+    <input
+        type="number"
+        id="altura"
+        placeholder="Altura"
+        required
+    >
+
+    <input
+        type="text"
+        id="piso"
+        placeholder="Piso (opcional)"
+    >
+
+    <input
+        type="text"
+        id="departamento"
+        placeholder="Departamento (opcional)"
+    >
+
+    <textarea
+        id="referencia"
+        placeholder="Referencia para encontrar el domicilio (opcional)"
+    ></textarea>
+
+    <button
         type="submit"
         class="btn-primary"
-        >
-            Continuar al pago
-        </button>
+    >
+        Continuar al pago
+    </button>
 
-    </form>
+</form>
 
 </section>
 

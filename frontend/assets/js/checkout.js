@@ -28,3 +28,42 @@ form.addEventListener(
         "resumen.html";
     }
 );
+
+
+const orden = {
+
+    nombre:
+    document.getElementById("nombre").value,
+
+    email:
+    document.getElementById("email").value,
+
+    telefono:
+    document.getElementById("telefono").value,
+
+    provincia:
+    document.getElementById("provincia").value,
+
+    localidad:
+    document.getElementById("localidad").value,
+
+    codigoPostal:
+    document.getElementById("codigoPostal").value,
+
+    calle:
+    document.getElementById("calle").value,
+
+    altura:
+    document.getElementById("altura").value,
+
+    piso:
+    document.getElementById("piso").value,
+
+    departamento:
+    document.getElementById("departamento").value,
+
+    referencia:
+    document.getElementById("referencia").value,
+
+    productos: carrito
+};

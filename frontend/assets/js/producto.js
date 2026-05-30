@@ -1,74 +1,105 @@
 const params =
-    new URLSearchParams(
-        window.location.search
-    );
+new URLSearchParams(
+window.location.search
+);
 
 const id =
-    Number(
-        params.get("id")
-    );
+Number(
+params.get("id")
+);
 
 const producto =
-    productos.find(
-        p => p.id === id
-    );
+productos.find(
+p => p.id === id
+);
 
 const container =
-    document.getElementById(
-        "productDetail"
-    );
+document.getElementById(
+"productDetail"
+);
 
-if (producto) {
+if(!producto){
 
-    container.innerHTML = `
+container.innerHTML = `
+<h2>
+Producto no encontrado
+</h2>
+`;
 
-<div class="product-detail">
+}else{
 
-    <img
-    src="${producto.imagen}"
-    style="
-    width:100%;
-    max-width:500px;
-    border-radius:20px;
-    "
-    >
+container.innerHTML = `
 
-    <h1>
-        ${producto.nombre}
-    </h1>
+<div class="product-page">
 
-    <h2>
-        USD ${producto.precio}
-    </h2>
+    <div class="product-image">
 
-    <p>
-        Producto original.
-        Garantía incluida.
-        Envíos a todo el país.
-    </p>
-
-    <div
-    style="
-    display:flex;
-    gap:15px;
-    margin-top:20px;
-    flex-wrap:wrap;
-    "
-    >
-
-        <button
-        onclick="addToCart(${producto.id})"
-        class="btn-primary"
+        <img
+        src="${producto.imagen}"
+        alt="${producto.nombre}"
         >
-            Agregar al carrito
-        </button>
 
-        <a
-        href="checkout.html?id=${producto.id}"
-        class="btn-primary"
-        >
-            Comprar ahora
-        </a>
+    </div>
+
+    <div class="product-info">
+
+        <span class="pf-badge">
+            EN STOCK
+        </span>
+
+        <h1>
+            ${producto.nombre}
+        </h1>
+
+        <h2>
+            USD ${producto.precio}
+        </h2>
+
+        <p>
+            ${producto.descripcion}
+        </p>
+
+        <div class="product-data">
+
+            <p>
+                Stock disponible:
+                ${producto.stock}
+            </p>
+
+            <p>
+                Garantía:
+                30 días
+            </p>
+
+            <p>
+                Envíos:
+                Todo Argentina
+            </p>
+
+            <p>
+                Pago:
+                Transferencia / Efectivo / Mercado Pago
+            </p>
+
+        </div>
+
+        <div class="product-actions">
+
+            <button
+            class="btn-primary"
+            onclick="addToCart(${producto.id})"
+            >
+                🛒 Agregar al carrito
+            </button>
+
+            <a
+            href="checkout.html?id=${producto.id}"
+            class="btn-primary"
+            >
+                Comprar ahora
+            </a>
+
+        </div>
 
     </div>
 
