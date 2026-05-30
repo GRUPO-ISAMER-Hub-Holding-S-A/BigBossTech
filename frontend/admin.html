@@ -1,65 +1,41 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./assets/css/ui.css">
     <title>BIGBOSS ADMIN</title>
 
-    <style>
-        body {
-            background: #050816;
-            color: white;
-            font-family: Inter;
-            padding: 40px;
-        }
-
-        h1 {
-            color: #00e5ff;
-        }
-
-        .panel {
-            background: #0f172a;
-            border: 1px solid #1e293b;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 14px;
-            border-bottom: 1px solid #1e293b;
-            text-align: left;
-        }
-
-        img {
-            width: 70px;
-            border-radius: 10px;
-        }
-
-        button {
-            background: #00e5ff;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .delete {
-            background: red;
-            color: white;
-        }
-    </style>
 </head>
 
 <body>
+
+    <div id="cur"></div>
+    <div id="cur-ring"></div>
+
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <span class="nav-logo-dot"></span>BIGBOSS
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="cart.html">Catálogo</a></li>
+            <li><a href="carrito.html">Carrito</a></li>
+        </ul>
+
+        <div class="nav-right">
+
+            <a href="carrito.html" class="cart-btn">
+                🛒
+                <span id="cartCount">0</span>
+            </a>
+
+        </div>
+    </nav>
+
+
+
 
     <h1>BIGBOSS ADMIN PANEL</h1>
 
@@ -120,7 +96,13 @@
 
     </script>
 
+
+
+
+
+    <script src="./assets/js/cursor.js"></script>
+
+
 </body>
 
 </html>
-```

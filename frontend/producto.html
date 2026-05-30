@@ -2,17 +2,28 @@
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIGBOSS TECH - Catálogo</title>
 
     <link rel="stylesheet" href="./assets/css/ui.css">
+
+    <title>Producto</title>
+
 </head>
 
 <body>
 
+
     <div id="cur"></div>
     <div id="cur-ring"></div>
+
+    <!-- NOTIFY -->
+    <div class="notify" id="notify">
+        <div class="n-head"><span class="n-dot"></span><span class="n-label" id="nLabel">Nueva compra</span></div>
+        <div class="n-text" id="nText">Alguien en Buenos Aires acaba de adquirir un iPhone 17 Pro</div>
+        <div class="n-time" id="nTime">hace 2 minutos · Córdoba, Argentina</div>
+    </div>
+
 
     <nav>
         <a href="index.html" class="nav-logo">
@@ -37,50 +48,16 @@
 
 
 
-
     <section>
 
-        <div class="sec-label">
-            // CARRITO
-        </div>
-
-        <h2 class="sec-title">
-            Tu
-            <span class="accent">
-                compra
-            </span>
-        </h2>
-
-        <div id="cartContainer" class="why-grid">
-
-        </div>
-
-        <div id="cartTotal" style="
-        margin-top:2rem;
-        font-size:2rem;
-        font-weight:700;
-        ">
+        <div id="productDetail">
 
         </div>
 
 
-        <button onclick="vaciarCarrito()" class="btn-primary">
-            Vaciar carrito
-        </button>
 
-        <div style="margin-top:2rem;">
-
-            <a href="checkout.html" class="btn-primary" id="checkoutBtn">
-                Finalizar compra
-            </a>
-
-        </div>
 
     </section>
-
-
-
-
     <!-- FOOTER -->
     <footer>
         <div class="footer-main">
@@ -133,11 +110,14 @@
 
 
 
-    <script src="./assets/js/catalog.js"></script>
-    <script src="./assets/js/productos.js"></script>
+
+
+    <script src="./assets/js/catalogo.js"></script>
     <script src="./assets/js/cart.js"></script>
+    <script src="./assets/js/producto.js"></script>
     <script src="./assets/js/cursor.js"></script>
-    <script src="global.js"></script>
+
+
 
 </body>
 
