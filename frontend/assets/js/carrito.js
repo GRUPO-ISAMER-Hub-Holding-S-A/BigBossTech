@@ -1,7 +1,7 @@
 carrito =
-JSON.parse(
-localStorage.getItem("carrito")
-) || [];
+    JSON.parse(
+        localStorage.getItem("carrito")
+    ) || [];
 
 const container =
     document.getElementById("cartContainer");
@@ -32,13 +32,13 @@ function renderCart() {
 
     carrito.forEach((producto, index) => {
 
-        total += producto.precio * producto.cantidad;
+        total += producto.price * producto.cantidad;
 
         container.innerHTML += `
 <div class="why-card">
 
     <img
-    src="${producto.imagen}"
+    src="${producto.image}"
     style="
     width:120px;
     border-radius:12px;
@@ -47,12 +47,12 @@ function renderCart() {
     >
 
     <h3>
-        ${producto.nombre}
+        ${producto.name}
     </h3>
 
     <p>
         Precio unitario:
-        USD ${producto.precio}
+        USD ${producto.price}
     </p>
 
     <div
@@ -91,7 +91,7 @@ function renderCart() {
     "
     >
         Subtotal:
-        USD ${producto.precio * producto.cantidad}
+        USD ${producto.price * producto.cantidad}
     </p>
 
     <button
@@ -184,12 +184,19 @@ renderCart();
 actualizarContador();
 
 
-function vaciarCarrito(){
+function vaciarCarrito() {
 
-carrito = [];
+    const confirmar =
+        confirm(
+            "¿Vaciar carrito?"
+        );
 
-guardar();
+    if (!confirmar) return;
 
-renderCart();
+    carrito = [];
+
+    guardar();
+
+    renderCart();
 
 }

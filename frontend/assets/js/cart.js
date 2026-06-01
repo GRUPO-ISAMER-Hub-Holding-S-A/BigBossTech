@@ -1,14 +1,17 @@
 let carrito =
-    JSON.parse(
-        localStorage.getItem("carrito")
-    ) || [];
+JSON.parse(
+    localStorage.getItem("carrito")
+) || [];
 
-function addToCart(id){
+async function addToCart(id){
+
+    const response =
+    await fetch(
+        `http://localhost:3000/products/${id}`
+    );
 
     const producto =
-    productos.find(
-        p => p.id === id
-    );
+    await response.json();
 
     const existente =
     carrito.find(
@@ -25,7 +28,6 @@ function addToCart(id){
             ...producto,
             cantidad:1
         });
-
     }
 
     localStorage.setItem(
@@ -37,10 +39,13 @@ function addToCart(id){
 }
 
 
+
 function actualizarContador(){
 
     const contador =
-    document.getElementById("cartCount");
+    document.getElementById(
+        "cartCount"
+    );
 
     if(!contador) return;
 

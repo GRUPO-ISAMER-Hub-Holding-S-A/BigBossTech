@@ -1,5 +1,35 @@
 const container =
-    document.getElementById("catalogContainer");
+document.getElementById(
+    "catalogContainer"
+);
+
+let productos = [];
+
+async function cargarProductos() {
+
+    try {
+
+        const response =
+        await fetch(
+            "http://localhost:3000/products"
+        );
+
+        productos =
+        await response.json();
+
+        mostrarProductos(productos);
+
+    } catch(error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+        <h2>
+            Error cargando productos
+        </h2>
+        `;
+    }
+}
 
 function renderProducto(producto) {
 
@@ -8,7 +38,7 @@ function renderProducto(producto) {
     <div class="prod-card">
 
         <img
-        src="${producto.imagen}"
+        src="${producto.image}"
         style="
         width:100%;
         height:280px;
@@ -19,15 +49,15 @@ function renderProducto(producto) {
         >
 
         <span class="pf-badge">
-            EN STOCK
+            STOCK: ${producto.stock}
         </span>
 
         <h3 style="margin-top:1rem;">
-            ${producto.nombre}
+            ${producto.name}
         </h3>
 
         <p>
-            USD ${producto.precio}
+            USD ${producto.price}
         </p>
 
         <div style="
@@ -46,7 +76,7 @@ function renderProducto(producto) {
 
             <button
             class="btn-primary"
-            onclick="addToCart(${producto.id})"
+            onclick="addToCart('${producto.id}')"
             >
                 🛒 Agregar
             </button>
@@ -60,19 +90,21 @@ function renderProducto(producto) {
 
 function mostrarProductos(lista) {
 
-    if (!container) return;
+    if(!container) return;
 
     container.innerHTML = "";
 
-    lista.forEach(renderProducto);
+    lista.forEach(
+        renderProducto
+    );
 }
 
-mostrarProductos(productos);
-
 const buscador =
-    document.getElementById("searchInput");
+document.getElementById(
+    "searchInput"
+);
 
-if (buscador) {
+if(buscador){
 
     buscador.addEventListener(
         "input",
@@ -83,50 +115,56 @@ if (buscador) {
 function filtrarProductos() {
 
     const texto =
-        buscador.value.toLowerCase();
+    buscador.value.toLowerCase();
 
     const filtrados =
-        productos.filter(producto =>
-            producto.nombre
-                .toLowerCase()
-                .includes(texto)
-        );
+    productos.filter(
+        producto =>
+        producto.nombre
+        .toLowerCase()
+        .includes(texto)
+    );
 
-    mostrarProductos(filtrados);
+    mostrarProductos(
+        filtrados
+    );
 }
 
 const sort =
-    document.getElementById(
-        "sortSelect"
-    );
+document.getElementById(
+    "sortSelect"
+);
 
-if (sort) {
+if(sort){
 
     sort.addEventListener(
         "change",
         ordenarProductos
     );
-
 }
+
 function ordenarProductos() {
 
-    let lista = [...productos];
+    let lista =
+    [...productos];
 
-    if (sort.value === "menor") {
+    if(sort.value === "menor"){
 
         lista.sort(
-            (a, b) =>
-                a.precio - b.precio
+            (a,b)=>
+            a.precio - b.precio
         );
     }
 
-    if (sort.value === "mayor") {
+    if(sort.value === "mayor"){
 
         lista.sort(
-            (a, b) =>
-                b.precio - a.precio
+            (a,b)=>
+            b.precio - a.precio
         );
     }
 
     mostrarProductos(lista);
 }
+
+cargarProductos();

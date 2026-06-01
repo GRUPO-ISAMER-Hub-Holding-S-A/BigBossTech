@@ -8,6 +8,12 @@ import { XssSanitizationMiddleware } from './common/middleware/xss-sanitization.
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
+
+    app.enableCors({
+        origin: true,
+        credentials: true,
+    });
+
     // ⭐ HELMET - Security Headers
     app.use(helmet({
         contentSecurityPolicy: {
@@ -88,10 +94,10 @@ async function bootstrap() {
     console.log(`
 ╔═══════════════════════════════════════════════════════╗
 ║                                                       ║
-║   🚀 BIGBOSS TECH API                                ║
-║   📍 Running on: http://localhost:${port}             ║
-║   🔐 Security: Helmet + JWT + Rate Limiting          ║
-║   📊 Database: MongoDB + Prisma                      ║
+║   🚀 BIGBOSS TECH API                                 ║
+║   📍 Running on: http://localhost:${port}                ║
+║   🔐 Security: Helmet + JWT + Rate Limiting           ║
+║   📊 Database: MongoDB + Prisma                       ║
 ║                                                       ║
 ╚═══════════════════════════════════════════════════════╝
   `);
