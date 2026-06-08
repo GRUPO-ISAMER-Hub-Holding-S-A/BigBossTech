@@ -1,21 +1,210 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Put,
+    Delete,
+    Body,
+    Param,
+    Patch,
+    UseGuards,
+    UseInterceptors,
+    UploadedFile
+} from '@nestjs/common';
+
 import { JwtAuthGuard } from '../../auth/module/guards/jwt-auth.guard';
 import { RolesGuard } from '../../auth/module/guards/roles.guard';
 import { Roles } from '../../auth/module/decorators/roles.decorator';
 
+import { ProductsService } from '../../products/products.service';
+import { CreateProductDto } from '../../products/dto/create-product.dto';
+
+import { PrismaService } from '../../protection/prisma.service';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
 @Controller('admin')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(
+    JwtAuthGuard,
+    RolesGuard
+)
 export class AdminController {
+
+    constructor(
+        private readonly productsService: ProductsService,
+        private readonly prisma: PrismaService
+    ) { }
 
     @Get('dashboard')
     @Roles('ADMIN')
     getDashboard() {
-        return { message: 'Admin dashboard' };
+
+        return {
+            message: 'Panel Admin'
+        };
     }
 
-    @Get('users')
-    @Roles('ADMIN', 'SUPPORT')
-    getUsers() {
-        return { users: [] };
+    @Get('products')
+    @Roles('ADMIN')
+    getProducts() {
+
+        return this.productsService.getProducts();
     }
+
+    @Get('orders')
+    @Roles('ADMIN')
+    getOrders() {
+
+        return this.prisma.order.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+    }
+
+    @Put('orders/:id/status')
+    @Roles('ADMIN')
+    updateOrderStatus(
+
+        @Param('id')
+        id: string,
+
+        @Body()
+        body: { status: string }
+
+    ) {
+
+        return this.prisma.order.update({
+
+            where: {
+                id
+            },
+
+            data: {
+                status: body.status
+            }
+        });
+    }
+
+    @Post('upload')
+    @Roles('ADMIN')
+    @UseInterceptors(
+        FileInterceptor(
+            'image',
+            {
+                storage: diskStorage({
+
+                    destination: './uploads',
+
+                    filename: (
+                        req,
+                        file,
+                        callback
+                    ) => {
+
+                        const uniqueName =
+                            Date.now() +
+                            extname(
+                                file.originalname
+                            );
+
+                        callback(
+                            null,
+                            uniqueName
+                        );
+                    }
+                }),
+
+                fileFilter: (
+                    req,
+                    file,
+                    callback
+                ) => {
+
+                    if (
+                        !file.mimetype.match(
+                            /\/(jpg|jpeg|png|webp)$/
+                        )
+                    ) {
+
+                        return callback(
+                            new Error(
+                                'Solo imágenes JPG, PNG o WEBP'
+                            ),
+                            false
+                        );
+                    }
+
+                    callback(
+                        null,
+                        true
+                    );
+                },
+
+                limits: {
+                    fileSize:
+                        5 * 1024 * 1024
+                }
+            }
+        )
+    )
+    uploadImage(
+        @UploadedFile()
+        file: Express.Multer.File
+    ) {
+
+        return {
+            image:
+                `/uploads/${file.filename}`
+        };
+    }
+
+    @Post('products')
+    @Roles('ADMIN')
+    createProduct(
+        @Body()
+        data: CreateProductDto
+    ) {
+
+        return this.productsService.createProduct(
+            data
+        );
+    }
+
+    @Put('products/:id')
+    @Roles('ADMIN')
+    updateProduct(
+        @Param('id')
+        id: string,
+
+        @Body()
+        data: CreateProductDto
+    ) {
+
+        return this.productsService.updateProduct(
+            id,
+            data
+        );
+    }
+
+    @Delete('products/:id')
+    @Roles('ADMIN')
+    deleteProduct(
+        @Param('id')
+        id: string
+    ) {
+
+        return this.productsService.deleteProduct(
+            id
+        );
+    }
+
+
+    
+
+
+
 }

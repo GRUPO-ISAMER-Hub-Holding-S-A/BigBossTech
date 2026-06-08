@@ -4,9 +4,14 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { XssSanitizationMiddleware } from './common/middleware/xss-sanitization.middleware';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app =
+        await NestFactory.create<NestExpressApplication>(
+            AppModule
+        );
 
 
     app.enableCors({
@@ -15,33 +20,41 @@ async function bootstrap() {
     });
 
     // ⭐ HELMET - Security Headers
-    app.use(helmet({
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false,
+
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
-                styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-                fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-                imgSrc: ["'self'", 'data:', 'https:'],
-                scriptSrc: ["'self'", "'unsafe-inline'"],
-                connectSrc: ["'self'"],
-            },
-        },
-        crossOriginEmbedderPolicy: false,
-        // Previene clickjacking
-        frameguard: { action: 'deny' },
-        // HTTPS strict
-        hsts: {
-            maxAge: 31536000,
-            includeSubDomains: true,
-            preload: true,
-        },
-        // Previene MIME sniffing
-        noSniff: true,
-        // Bloquea XSS reflejado
-        xssFilter: true,
-        // Referrer policy
-        referrerPolicy: { policy: 'no-referrer' },
-    }));
+
+                styleSrc: [
+                    "'self'",
+                    "'unsafe-inline'",
+                    "https://fonts.googleapis.com"
+                ],
+
+                fontSrc: [
+                    "'self'",
+                    "https://fonts.gstatic.com"
+                ],
+
+                imgSrc: [
+                    "'self'",
+                    "data:",
+                    "blob:",
+                    "http:",
+                    "https:"
+                ],
+
+                scriptSrc: [
+                    "'self'",
+                    "'unsafe-inline'"
+                ]
+            }
+        }
+    })
+);
 
     // ⭐ CORS - Origins específicos
     app.enableCors({
@@ -86,7 +99,15 @@ async function bootstrap() {
 
     SwaggerModule.setup('docs', app, document);
 
-
+    app.useStaticAssets(
+        join(
+            process.cwd(),
+            'uploads'
+        ),
+        {
+            prefix: '/uploads/',
+        },
+    );
 
     const port = process.env.PORT || 3000;
     await app.listen(port);

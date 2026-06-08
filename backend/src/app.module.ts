@@ -8,7 +8,8 @@ import { PrismaModule } from './protection/prisma.module';
 import { AuthModule } from './auth/module/auth.module';
 import { UsersModule } from './users/users.module';
 import { ProductsModule } from './products/products.module';
-import { AdminModule } from '../src/admin/routes/admin.module';
+import { AdminModule } from './admin/routes/admin.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
     imports: [
@@ -35,6 +36,7 @@ import { AdminModule } from '../src/admin/routes/admin.module';
         UsersModule,
         ProductsModule,
         AdminModule,
+        OrdersModule
     ],
     controllers: [AppController],
     providers: [

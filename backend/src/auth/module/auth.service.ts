@@ -21,27 +21,41 @@ export class AuthService {
         return bcrypt.compare(password, hash);
     }
 
-    async login(email: string, password: string) {
-        const user = await this.prisma.user.findUnique({ where: { email } });
+async login(email: string, password: string) {
 
-        if (!user || !(await this.validatePassword(password, user.password))) {
-            throw new UnauthorizedException('Invalid credentials');
-        }
+    const user = await this.prisma.user.findUnique({
+        where: { email }
+    });
 
-        const payload = {
-            sub: user.id,
-            email: user.email,
-            role: user.role,
-        };
+    console.log('USER:', user);
 
-        return {
-            access_token: this.jwtService.sign(payload, {
-                expiresIn: '15m',
-            }),
-            refresh_token: this.jwtService.sign(payload, {
-                secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-                expiresIn: '7d',
-            }),
-        };
+    if (!user) {
+        throw new UnauthorizedException('User not found');
     }
+
+    const valid = await bcrypt.compare(
+        password,
+        user.password
+    );
+
+    console.log('PASSWORD RECIBIDA:', password);
+    console.log('HASH GUARDADO:', user.password);
+    console.log('VALID:', valid);
+
+    if (!valid) {
+        throw new UnauthorizedException(
+            'Invalid credentials'
+        );
+    }
+
+    const payload = {
+        sub: user.id,
+        email: user.email,
+        role: user.role,
+    };
+
+    return {
+        access_token: this.jwtService.sign(payload),
+    };
+}
 }

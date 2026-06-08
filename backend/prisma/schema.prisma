@@ -25,3 +25,31 @@ model Product {
   category    String?
   createdAt   DateTime @default(now())
 }
+
+model Order {
+
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  customerName String
+  customerEmail String
+  customerPhone String
+
+  provincia String
+  localidad String
+
+  codigoPostal String
+  calle String
+  altura String
+
+  piso String?
+  departamento String?
+  referencia String?
+
+  total Float
+
+  products Json
+
+  status String @default("PENDING")
+
+  createdAt DateTime @default(now())
+}
