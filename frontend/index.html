@@ -115,7 +115,7 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="./assets/image/telefono-inteligente.png">
-    
+
 
     <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,6 +178,9 @@
             <li><a href="#biggi">Biggi IA</a></li>
             <li><a href="#contacto">Contacto</a></li>
         </ul>
+
+        <div id="adminLink"></div>
+
         <div class="nav-right">
 
             <a href="carrito.html" class="cart-btn">
@@ -319,7 +322,7 @@
                 <div class="pf-price-note">PRECIO ESPECIAL · GARANTÍA 30 DÍAS</div>
                 <div style="margin-top:1.75rem;display:flex;gap:.75rem;flex-wrap:wrap;">
 
-                    <button class="btn-primary" onclick="addToCart('6a1bb47b43b848b736319d0a')">
+                    <button class="btn-primary" onclick="addToCart('6a1cf27f25fc0e74d841edc9')">
                         🛒 Agregar al carrito
                     </button>
 
@@ -591,10 +594,46 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>© 2026 BIGBOSS TECH · Córdoba, Argentina</p>
+            <p id="adminAccess"> © 2026 BIGBOSS TECH </p>
             <div class="footer-status"><span class="status-dot"></span>Precios en USD</div>
         </div>
     </footer>
+
+
+
+    <script>
+
+        let clicks = 0;
+
+        document
+            .querySelector(".nav-logo")
+            .addEventListener(
+                "click",
+                (e) => {
+
+                    e.preventDefault();
+
+                    clicks++;
+
+                    console.log("Clicks:", clicks);
+
+                    if (clicks >= 4) {
+
+                        window.location.href =
+                            "login.html";
+                    }
+
+                    setTimeout(
+                        () => {
+                            clicks = 0;
+                        },
+                        3000
+                    );
+                }
+            );
+
+    </script>
+
 
     <script>
         // Carousel
@@ -735,6 +774,33 @@
 
 
     <script src="./assets/js/cart.js"></script>
+
+
+
+    <script>
+
+        const token =
+            localStorage.getItem("token");
+
+        if (token) {
+
+            const navRight =
+                document.querySelector(".nav-right");
+
+            navRight.insertAdjacentHTML(
+                "beforeend",
+                `
+        <a
+            href="admin.html"
+            class="nav-pill"
+        >
+            ⚙ Admin
+        </a>
+        `
+            );
+        }
+
+    </script>
 
 
 </body>

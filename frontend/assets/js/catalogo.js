@@ -120,7 +120,7 @@ function filtrarProductos() {
     const filtrados =
     productos.filter(
         producto =>
-        producto.nombre
+        producto.name
         .toLowerCase()
         .includes(texto)
     );
@@ -152,7 +152,7 @@ function ordenarProductos() {
 
         lista.sort(
             (a,b)=>
-            a.precio - b.precio
+            a.price - b.price
         );
     }
 
@@ -160,7 +160,7 @@ function ordenarProductos() {
 
         lista.sort(
             (a,b)=>
-            b.precio - a.precio
+            b.price - a.price
         );
     }
 

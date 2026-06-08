@@ -1,60 +1,51 @@
-const carrito =
-    JSON.parse(
-        localStorage.getItem("carrito")
-    ) || [];
+const orden =
+JSON.parse(
+    localStorage.getItem(
+        "ultimaOrden"
+    )
+);
 
-const cliente =
-    JSON.parse(
-        localStorage.getItem("cliente")
-    ) || {};
+const resumen =
+document.getElementById(
+    "resumen"
+);
 
-const container =
-    document.getElementById("resumenContainer");
+if(!orden){
 
-let total = 0;
+    resumen.innerHTML =
+    "<h2>No existe orden</h2>";
 
-carrito.forEach(producto => {
+}else{
 
-    total +=
-        producto.precio *
-        producto.cantidad;
+    resumen.innerHTML = `
 
-    container.innerHTML += `
-
-    <div class="why-card">
+    <div class="prod-card">
 
         <h3>
-            ${producto.nombre}
+            Orden #${orden.id}
         </h3>
 
         <p>
-            Cantidad:
-            ${producto.cantidad}
+            Cliente:
+            ${orden.customerName}
         </p>
 
         <p>
-            USD
-            ${producto.precio}
+            Email:
+            ${orden.customerEmail}
+        </p>
+
+        <p>
+            Total:
+            USD ${orden.total}
+        </p>
+
+        <p>
+            Estado:
+            ${orden.status}
         </p>
 
     </div>
 
     `;
-});
-
-container.innerHTML += `
-
-<h2>
-Total USD ${total}
-</h2>
-
-<p>
-Cliente:
-${cliente.nombre}
-</p>
-
-<p>
-${cliente.email}
-</p>
-
-`;
+}
