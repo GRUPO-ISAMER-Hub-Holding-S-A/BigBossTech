@@ -41,9 +41,9 @@ model Order {
   calle String
   altura String
 
-  piso String
-  departamento String
-  referencia String
+  piso String?
+  departamento String?
+  referencia String?
 
   total Float
 

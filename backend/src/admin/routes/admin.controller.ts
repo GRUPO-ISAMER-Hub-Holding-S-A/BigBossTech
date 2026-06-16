@@ -248,7 +248,18 @@ export class AdminController {
     }
 
 
-
+    @Patch('orders/:id/status')
+    updateStatus(
+        @Param('id') id: string,
+        @Body() body: { status: string }
+    ) {
+        return this.prisma.order.update({
+            where: { id },
+            data: {
+                status: body.status
+            }
+        });
+    }
 
 
 

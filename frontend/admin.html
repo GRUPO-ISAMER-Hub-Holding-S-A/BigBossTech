@@ -92,8 +92,6 @@
     </nav>
 
 
-
-
     <h1>BIGBOSS ADMIN PANEL</h1>
 
 
@@ -112,7 +110,6 @@ margin-bottom:30px;
         </button>
 
     </div>
-
 
 
     <h2>Nuevo Producto</h2>
@@ -158,6 +155,53 @@ margin-bottom:30px;
     </div>
 
 
+
+    <div id="statsCards" style="
+display:flex;
+gap:20px;
+margin-bottom:30px;
+flex-wrap:wrap;
+">
+
+        <div class="card">
+            Pendientes:
+            <span id="pendingCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Pagadas:
+            <span id="paidCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Enviadas:
+            <span id="shippedCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Entregadas:
+            <span id="deliveredCount">
+                0
+            </span>
+        </div>
+
+        <div class="card">
+            Canceladas:
+            <span id="cancelledCount">
+                0
+            </span>
+        </div>
+
+    </div>
+
+
+
     <hr style="margin:50px 0;">
 
     <h2>Órdenes Recibidas</h2>
@@ -182,6 +226,7 @@ margin-bottom:30px;
                     <th>Productos</th>
                     <th>Total</th>
                     <th>Estado</th>
+                    <th>Acción</th>
                 </tr>
 
             </thead>
@@ -208,7 +253,6 @@ margin-bottom:30px;
             window.location.href =
                 "index.html";
         }
-
 
 
 
@@ -312,6 +356,43 @@ margin-bottom:30px;
 
                 const ordenes = await res.json();
 
+                document.getElementById(
+                    "pendingCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "PENDING"
+                    ).length;
+
+                document.getElementById(
+                    "paidCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "PAID"
+                    ).length;
+
+                document.getElementById(
+                    "shippedCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "SHIPPED"
+                    ).length;
+
+                document.getElementById(
+                    "deliveredCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "DELIVERED"
+                    ).length;
+
+                document.getElementById(
+                    "cancelledCount"
+                ).textContent =
+                    ordenes.filter(
+                        o => o.status === "CANCELLED"
+                    ).length;
+
+
+
                 const tbody =
                     document.getElementById("ordersTable");
 
@@ -342,11 +423,59 @@ margin-bottom:30px;
 
                 <td>${order.referencia || "-"}</td>
 
-                <td>${Array.isArray(order.products)? order.products.map(p =>`${p.name} x${p.cantidad}`).join("<br>"): "-"}</td>
+                <td>${Array.isArray(order.products) ? order.products.map(p => `${p.name} x${p.cantidad}`).join("<br>") : "-"}</td>
 
                 <td>USD ${order.total}</td>
 
                 <td>${order.status}</td>
+
+<td>
+
+<select
+onchange="changeOrderStatus(
+'${order.id}',
+this.value
+)"
+>
+
+<option
+value="PENDING"
+${order.status === "PENDING" ? "selected" : ""}
+>
+Pendiente
+</option>
+
+<option
+value="PAID"
+${order.status === "PAID" ? "selected" : ""}
+>
+Pagado
+</option>
+
+<option
+value="SHIPPED"
+${order.status === "SHIPPED" ? "selected" : ""}
+>
+Enviado
+</option>
+
+<option
+value="DELIVERED"
+${order.status === "DELIVERED" ? "selected" : ""}
+>
+Entregado
+</option>
+
+<option
+value="CANCELLED"
+${order.status === "CANCELLED" ? "selected" : ""}
+>
+Cancelado
+</option>
+
+</select>
+
+</td>
 
             </tr>
             `;
@@ -362,7 +491,46 @@ margin-bottom:30px;
         }
 
 
+        async function changeOrderStatus(
+            orderId,
+            status
+        ) {
 
+            try {
+
+                const token =
+                    localStorage.getItem("token");
+
+                await fetch(
+                    `${API_URL}/admin/orders/${orderId}/status`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Authorization:
+                                `Bearer ${token}`
+                        },
+
+                        body: JSON.stringify({
+                            status
+                        })
+                    }
+                );
+
+                loadOrders();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "No se pudo actualizar"
+                );
+            }
+        }
 
 
 
