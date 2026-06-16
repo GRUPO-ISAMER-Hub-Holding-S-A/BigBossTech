@@ -14,10 +14,11 @@ export class OrdersController {
         private ordersService: OrdersService
     ) { }
 
-    @Post()
-    create(
-        @Body() dto: CreateOrderDto
-    ) {
-        return this.ordersService.create(dto);
-    }
+@Post()
+create(
+    @Body() dto: CreateOrderDto
+) {
+
+    return this.ordersService.create(dto);
+}
 }

@@ -322,9 +322,7 @@
                 <div class="pf-price-note">PRECIO ESPECIAL · GARANTÍA 30 DÍAS</div>
                 <div style="margin-top:1.75rem;display:flex;gap:.75rem;flex-wrap:wrap;">
 
-                    <button class="btn-primary" onclick="addToCart('6a1cf27f25fc0e74d841edc9')">
-                        🛒 Agregar al carrito
-                    </button>
+                    <button class="btn-primary" onclick="addToCart('6a1cf27f25fc0e74d841edc9')"> 🛒 Agregar al carrito </button>
 
                     <a href="https://wa.me/5493515056742?text=Hola!%20Quiero%20el%20iPhone%2017%20Pro%20Max%20Orange"
                         target="_blank" rel="noopener noreferrer" class="btn-ghost">
@@ -711,65 +709,6 @@
 
 
 
-    <script>
-
-        function addToCart(producto) {
-
-            let carrito =
-                JSON.parse(
-                    localStorage.getItem("carrito")
-                ) || [];
-
-            const existe =
-                carrito.find(
-                    p => p.id === producto.id
-                );
-
-            if (existe) {
-
-                existe.cantidad++;
-
-            } else {
-
-                carrito.push({
-                    ...producto,
-                    cantidad: 1
-                });
-            }
-
-            localStorage.setItem(
-                "carrito",
-                JSON.stringify(carrito)
-            );
-
-            updateCartCount();
-
-            alert("Producto agregado al carrito");
-        }
-
-        function updateCartCount() {
-
-            let carrito =
-                JSON.parse(
-                    localStorage.getItem("carrito")
-                ) || [];
-
-            const count =
-                document.getElementById("cartCount");
-
-            if (!count) return;
-
-            const total =
-                carrito.reduce(
-                    (acc, p) =>
-                        acc + p.cantidad,
-                    0
-                );
-
-            count.innerText = total;
-        }
-
-    </script>
 
 
 

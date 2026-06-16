@@ -10,6 +10,9 @@ export class OrdersService {
 
 async create(dto: any) {
 
+
+    
+
     const orden = await this.prisma.order.create({
         data: {
             customerName: dto.nombre,
@@ -54,4 +57,7 @@ async create(dto: any) {
 
     return orden;
 }
+
 }
+
+

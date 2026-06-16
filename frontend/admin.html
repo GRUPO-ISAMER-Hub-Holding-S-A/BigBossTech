@@ -158,7 +158,39 @@ margin-bottom:30px;
     </div>
 
 
+    <hr style="margin:50px 0;">
 
+    <h2>Órdenes Recibidas</h2>
+
+    <div class="panel">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Provincia</th>
+                    <th>Localidad</th>
+                    <th>CP</th>
+                    <th>Dirección</th>
+                    <th>Piso</th>
+                    <th>Depto</th>
+                    <th>Referencia</th>
+                    <th>Productos</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="ordersTable"></tbody>
+
+        </table>
+
+    </div>
 
 
     <script>
@@ -251,6 +283,7 @@ margin-bottom:30px;
             `;
                 });
 
+
             } catch (error) {
 
                 console.error(error);
@@ -258,6 +291,81 @@ margin-bottom:30px;
                 alert("Error cargando productos");
             }
         }
+
+
+
+
+        async function loadOrders() {
+
+            try {
+
+                const token = localStorage.getItem("token");
+
+                const res = await fetch(
+                    `${API_URL}/admin/orders`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                const ordenes = await res.json();
+
+                const tbody =
+                    document.getElementById("ordersTable");
+
+                tbody.innerHTML = "";
+
+                ordenes.forEach(order => {
+
+                    tbody.innerHTML += `
+            <tr>
+
+                <td>${order.customerName}</td>
+
+                <td>${order.customerEmail}</td>
+
+                <td>${order.customerPhone}</td>
+
+                <td>${order.provincia}</td>
+
+                <td>${order.localidad}</td>
+
+                <td>${order.codigoPostal}</td>
+
+                <td>${order.calle} ${order.altura}</td>
+
+                <td>${order.piso || "-"}</td>
+
+                <td>${order.departamento || "-"}</td>
+
+                <td>${order.referencia || "-"}</td>
+
+                <td>${Array.isArray(order.products)? order.products.map(p =>`${p.name} x${p.cantidad}`).join("<br>"): "-"}</td>
+
+                <td>USD ${order.total}</td>
+
+                <td>${order.status}</td>
+
+            </tr>
+            `;
+                });
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert("Error cargando órdenes");
+
+            }
+        }
+
+
+
+
+
+
 
         async function deleteProduct(id) {
 
@@ -334,131 +442,131 @@ margin-bottom:30px;
 
 
 
-        async function saveEdit(){
+        async function saveEdit() {
 
-    const id =
-        document.getElementById(
-            "editId"
-        ).value;
+            const id =
+                document.getElementById(
+                    "editId"
+                ).value;
 
-    try{
+            try {
 
-        const productRes =
-            await fetch(
-                `${API_URL}/products/${id}`
-            );
+                const productRes =
+                    await fetch(
+                        `${API_URL}/products/${id}`
+                    );
 
-        const product =
-            await productRes.json();
+                const product =
+                    await productRes.json();
 
-        let imageUrl =
-            product.image;
+                let imageUrl =
+                    product.image;
 
-        const imageFile =
-            document.getElementById(
-                "editImage"
-            ).files[0];
+                const imageFile =
+                    document.getElementById(
+                        "editImage"
+                    ).files[0];
 
-        if(imageFile){
+                if (imageFile) {
 
-            const formData =
-                new FormData();
+                    const formData =
+                        new FormData();
 
-            formData.append(
-                "image",
-                imageFile
-            );
+                    formData.append(
+                        "image",
+                        imageFile
+                    );
 
-            const uploadRes =
-                await fetch(
-                    `${API_URL}/admin/upload`,
-                    {
-                        method:"POST",
-                        headers:{
-                            Authorization:
-                            `Bearer ${token}`
-                        },
-                        body:formData
-                    }
+                    const uploadRes =
+                        await fetch(
+                            `${API_URL}/admin/upload`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    Authorization:
+                                        `Bearer ${token}`
+                                },
+                                body: formData
+                            }
+                        );
+
+                    const uploadData =
+                        await uploadRes.json();
+
+                    imageUrl =
+                        `${API_URL}${uploadData.image}`;
+                }
+
+                const data = {
+
+                    name:
+                        document.getElementById(
+                            "editName"
+                        ).value,
+
+                    description:
+                        document.getElementById(
+                            "editDescription"
+                        ).value,
+
+                    category:
+                        document.getElementById(
+                            "editCategory"
+                        ).value,
+
+                    stock: Number(
+                        document.getElementById(
+                            "editStock"
+                        ).value
+                    ),
+
+                    price: Number(
+                        document.getElementById(
+                            "editPrice"
+                        ).value
+                    ),
+
+                    image: imageUrl
+                };
+
+                const res =
+                    await fetch(
+                        `${API_URL}/admin/products/${id}`,
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Authorization:
+                                    `Bearer ${token}`
+                            },
+                            body: JSON.stringify(data)
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    throw new Error();
+                }
+
+                alert(
+                    "Producto actualizado"
                 );
 
-            const uploadData =
-                await uploadRes.json();
+                closeModal();
 
-            imageUrl =
-                `${API_URL}${uploadData.image}`;
+                loadProducts();
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "No se pudo actualizar"
+                );
+            }
         }
-
-        const data = {
-
-            name:
-                document.getElementById(
-                    "editName"
-                ).value,
-
-            description:
-                document.getElementById(
-                    "editDescription"
-                ).value,
-
-            category:
-                document.getElementById(
-                    "editCategory"
-                ).value,
-
-            stock:Number(
-                document.getElementById(
-                    "editStock"
-                ).value
-            ),
-
-            price:Number(
-                document.getElementById(
-                    "editPrice"
-                ).value
-            ),
-
-            image:imageUrl
-        };
-
-        const res =
-            await fetch(
-                `${API_URL}/admin/products/${id}`,
-                {
-                    method:"PUT",
-                    headers:{
-                        "Content-Type":
-                        "application/json",
-
-                        Authorization:
-                        `Bearer ${token}`
-                    },
-                    body:JSON.stringify(data)
-                }
-            );
-
-        if(!res.ok){
-
-            throw new Error();
-        }
-
-        alert(
-            "Producto actualizado"
-        );
-
-        closeModal();
-
-        loadProducts();
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "No se pudo actualizar"
-        );
-    }
-}
 
 
 
@@ -592,6 +700,7 @@ margin-bottom:30px;
         }
 
         loadProducts();
+        loadOrders();
 
     </script>
 

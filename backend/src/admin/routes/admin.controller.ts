@@ -19,6 +19,8 @@ import { Roles } from '../../auth/module/decorators/roles.decorator';
 import { ProductsService } from '../../products/products.service';
 import { CreateProductDto } from '../../products/dto/create-product.dto';
 
+import { AdminService } from '../routes/@roles(admin)/admin.service';
+
 import { PrismaService } from '../../protection/prisma.service';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -35,6 +37,7 @@ export class AdminController {
 
     constructor(
         private readonly productsService: ProductsService,
+        private readonly adminService: AdminService,
         private readonly prisma: PrismaService
     ) { }
 
@@ -64,6 +67,48 @@ export class AdminController {
             }
         });
     }
+
+
+
+    @Get('stats')
+    @Roles('ADMIN')
+    async getStats() {
+
+        const orders =
+            await this.prisma.order.findMany();
+
+        const totalVentas =
+            orders.reduce(
+                (acc, order) =>
+                    acc + order.total,
+                0
+            );
+
+        const pendientes =
+            orders.filter(
+                o => o.status === 'PENDING'
+            ).length;
+
+        const enviadas =
+            orders.filter(
+                o => o.status === 'SHIPPED'
+            ).length;
+
+        return {
+
+            totalVentas,
+
+            totalOrdenes:
+                orders.length,
+
+            pendientes,
+
+            enviadas
+        };
+    }
+
+
+
 
     @Put('orders/:id/status')
     @Roles('ADMIN')
@@ -203,7 +248,7 @@ export class AdminController {
     }
 
 
-    
+
 
 
 

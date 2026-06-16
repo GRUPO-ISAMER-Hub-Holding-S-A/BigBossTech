@@ -28,7 +28,7 @@ model Product {
 
 model Order {
 
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId 
 
   customerName String
   customerEmail String
@@ -41,9 +41,9 @@ model Order {
   calle String
   altura String
 
-  piso String?
-  departamento String?
-  referencia String?
+  piso String
+  departamento String
+  referencia String
 
   total Float
 
